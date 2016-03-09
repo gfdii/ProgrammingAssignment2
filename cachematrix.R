@@ -1,15 +1,30 @@
-## Put comments here that give an overall description of what your
-## functions do
+## These functions are interrelated, the first will allow the second to calculate and check for storage
+## in the global environment
 
-## Write a short comment describing this function
+## mCM pulls together a list of functions that allow caching of a matrix
 
-makeCacheMatrix <- function(x = matrix()) {
-
+makeCacheMatrix <- function(A = matrix()) {
+      m <- NULL
+      set <- function(y) {
+            A <<- y
+            m <<- NULL
+      }
+      get <- function() A
+      inverse <- function(solve) m <<- inverse
+      getinverse <- function() m
+      list(get = get, inverse = inverse, getinverse = getinverse)
 }
 
+## First checks for 
 
-## Write a short comment describing this function
-
-cacheSolve <- function(x, ...) {
-        ## Return a matrix that is the inverse of 'x'
+cachesolve <- function(A, ...) {
+      m <- A$getinverse()
+      if(!is.null(m)) {
+            message("getting cached data")
+            return(m)
+      }
+      data <- A$get()
+      m <- solve(data, ...)
+      A$inverse(m)
+      m
 }
